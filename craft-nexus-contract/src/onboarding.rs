@@ -393,6 +393,16 @@ pub enum DataKey {
     PohVerifier,
     /// Monotonic canonical onboarding state revision per user.
     UserStateRevision(Address),
+    /// Persisted profile schema-version marker per user (#1056).
+    UserStateVersion(Address),
+    /// Global counter of actively onboarded users.
+    ActiveUserCount,
+    /// Global counter of onboarding operations.
+    GlobalOnboardCount,
+    /// Global counter of username changes.
+    GlobalUsernameChangeCount,
+    /// Global counter of admin actions.
+    GlobalAdminActionCount,
     /// An operation binding already consumed by an escrow contract.
     UsedAttestation(Address, Bytes),
 }
