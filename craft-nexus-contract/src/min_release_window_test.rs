@@ -385,23 +385,22 @@ fn test_reasonable_minimum_windows() {
         7 * ONE_DAY,   // 1 week
     ];
 
-    for (idx, min_window) in reasonable_minimums.iter().enumerate() {
-        client.set_min_release_window(min_window);
+    for min_window in reasonable_minimums {
+        client.set_min_release_window(&min_window);
 
         let retrieved_min = client.get_min_release_window();
-        assert_eq!(retrieved_min, *min_window);
+        assert_eq!(retrieved_min, min_window);
 
-        // Use a unique order ID per iteration — duplicate identifiers are
-        // rejected (#1027).
+        // Create escrow with this minimum
         let escrow = client.create_escrow(
             &buyer,
             &seller,
             &token_addr,
             &1_000_000,
-            &(idx as u32 + 1),
-            &Some(*min_window),
+            &1,
+            &Some(min_window),
         );
-        assert_eq!(escrow.release_window, *min_window);
+        assert_eq!(escrow.release_window, min_window);
     }
 }
 

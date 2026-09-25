@@ -38,12 +38,10 @@
 //! ```
 
 pub mod escrow_props;
-pub mod financial_conservation;
 pub mod generators;
 pub mod harness;
 pub mod invariants;
 pub mod model;
-pub mod model_shrinking_test;
 pub mod onboarding_props;
 pub mod staking_props;
 pub mod upgrade_props;

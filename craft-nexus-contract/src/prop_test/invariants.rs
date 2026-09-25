@@ -35,9 +35,7 @@ pub fn assert_fund_conservation(
     if allocation.total_locked > balance {
         return Err(alloc::format!(
             "fund_conservation: locked({}) > balance({}) for token {:?}",
-            allocation.total_locked,
-            balance,
-            token_id
+            allocation.total_locked, balance, token_id
         ));
     }
     Ok(())
@@ -104,9 +102,7 @@ pub fn assert_terminal_immutable(
     if first.status != second.status {
         return Err(alloc::format!(
             "terminal_immutable: escrow {} status changed {:?} → {:?}",
-            order_id,
-            first.status,
-            second.status
+            order_id, first.status, second.status
         ));
     }
     Ok(())
@@ -122,9 +118,9 @@ pub fn assert_unstake_rejected_before_cooldown(
 ) -> Result<(), String> {
     match client.try_unstake_tokens(artisan, token_id) {
         Err(_) | Ok(Err(_)) => Ok(()),
-        Ok(Ok(_)) => {
-            Err("stake_cooldown_monotone: unstake succeeded before cooldown elapsed".to_string())
-        }
+        Ok(Ok(_)) => Err(
+            "stake_cooldown_monotone: unstake succeeded before cooldown elapsed".to_string(),
+        ),
     }
 }
 
@@ -134,8 +130,7 @@ pub fn assert_upgrade_nonce_increased(before: u32, after: u32) -> Result<(), Str
     if after <= before {
         Err(alloc::format!(
             "upgrade_nonce_monotone: nonce did not increase (before={}, after={})",
-            before,
-            after
+            before, after
         ))
     } else {
         Ok(())
@@ -153,9 +148,9 @@ pub fn assert_paused_blocks_create(
 ) -> Result<(), String> {
     match client.try_create_escrow(buyer, seller, token_id, &1_000, &9_999_999, &None) {
         Err(_) | Ok(Err(_)) => Ok(()),
-        Ok(Ok(_)) => {
-            Err("paused_blocks_mutations: create_escrow succeeded while paused".to_string())
-        }
+        Ok(Ok(_)) => Err(
+            "paused_blocks_mutations: create_escrow succeeded while paused".to_string(),
+        ),
     }
 }
 
@@ -171,8 +166,7 @@ pub fn assert_unauthorized_cannot_resolve(
         Err(_) | Ok(Err(_)) => Ok(()),
         Ok(Ok(_)) => Err(alloc::format!(
             "role_authorization: unauthorized {:?} resolved dispute on escrow {}",
-            unauthorized,
-            order_id
+            unauthorized, order_id
         )),
     }
 }
@@ -186,9 +180,9 @@ pub fn assert_unauthorized_cannot_propose_upgrade(
     let fake_hash = soroban_sdk::BytesN::from_array(env, &[0u8; 32]);
     match client.try_propose_upgrade_wasm(unauthorized, &fake_hash) {
         Err(_) | Ok(Err(_)) => Ok(()),
-        Ok(Ok(_)) => {
-            Err("role_authorization: unauthorized address proposed a WASM upgrade".to_string())
-        }
+        Ok(Ok(_)) => Err(
+            "role_authorization: unauthorized address proposed a WASM upgrade".to_string(),
+        ),
     }
 }
 
@@ -205,11 +199,7 @@ pub fn assert_fee_allocation_sums_to_escrow(
     if sum != escrow_amount {
         Err(alloc::format!(
             "fee_allocation: platform({}) + seller({}) + buyer({}) = {} != escrow({})",
-            platform_fee,
-            seller_amount,
-            buyer_amount,
-            sum,
-            escrow_amount
+            platform_fee, seller_amount, buyer_amount, sum, escrow_amount
         ))
     } else {
         Ok(())
@@ -226,9 +216,7 @@ pub fn assert_recurring_released_le_total(
     if released > total {
         Err(alloc::format!(
             "recurring_conservation: escrow {} released {} > total {}",
-            escrow_id,
-            released,
-            total
+            escrow_id, released, total
         ))
     } else {
         Ok(())
